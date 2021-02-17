@@ -33,7 +33,7 @@ public class ArticleService {
 		return null;
 	}
 
-	public List<Article> getArticles(String searchKeywordType,String searchKeyword) {
+	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
 		if(searchKeyword == null) {
 			return articles;
 		}
