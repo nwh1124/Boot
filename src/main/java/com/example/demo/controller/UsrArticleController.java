@@ -43,6 +43,8 @@ public class UsrArticleController {
 		param.put("searchKeywordType", searchKeywordType);
 		param.put("searchKeyword", searchKeyword);
 		
+		System.out.println(param);
+		
 		return articleService.getArticles(param);
 	}
 	
