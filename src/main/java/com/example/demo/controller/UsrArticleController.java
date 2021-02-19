@@ -31,8 +31,12 @@ public class UsrArticleController {
 			searchKeywordType = "titleAndBody";
 		}
 		
+		if(searchKeyword == null) {
+			searchKeyword = "";
+		}
+		
 		if(searchKeyword != null && searchKeyword.length() == 0) {
-			searchKeyword = null;
+			searchKeyword = "";
 		}
 		
 		if(searchKeyword != null) {
@@ -90,12 +94,9 @@ public class UsrArticleController {
 		if(param.get("id") == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
-		if(param.get("title") == null) {
-			return new ResultData("F-1", "title을 입력해주세요.");
-		}
-		if(param.get("body") == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
+		if(param.get("title") == null && param.get("body") == null) {
+			return new ResultData("F-1", "수정할 제목 또는 내용을 입력해주세요.");
+		}		
 		
 		Article article = articleService.getArticle(param);
 		
