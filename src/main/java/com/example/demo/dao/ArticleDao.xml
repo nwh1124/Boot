@@ -18,14 +18,22 @@
 		SELECT *
 		FROM article
 		WHERE 1
+		<if test="searchKeywordType == 'title'">
+			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchKeywordType == 'body'">
+			AND `body` LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchKeywordType == 'titleAndBody'">
+			AND (title LIKE CONCAT('%', #{searchKeyword}, '%') OR `body` LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
 		ORDER BY id DESC
 	</select>
 
-	<insert id="addArticle">
+	<insert id="addArticle" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO article
 		SET regDate = NOW(),
-		updateDate =
-		NOW(),
+		updateDate = NOW(),
 		title = #{title},
 		`body` = #{body}
 	</insert>
@@ -38,8 +46,7 @@
 	<update id="modifyArticle">
 		UPDATE article
 		SET updateDate = NOW(),
-		title =
-		#{title},
+		title =	#{title},
 		`body` = #{body}
 		WHERE id = #{id}
 	</update>

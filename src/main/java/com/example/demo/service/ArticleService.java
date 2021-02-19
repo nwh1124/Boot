@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.ArticleDao;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.ResultData;
+import com.example.demo.util.Util;
 
 @Service
 public class ArticleService {
@@ -15,42 +17,32 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 	
-	public Article getArticleById(int id) {		
-		return articleDao.getArticle(id);
+	public Article getArticle(Map<String, Object> param) {		
+		return articleDao.getArticle(param);
 	}
 
-	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
-		return articleDao.getArticles(searchKeywordType, searchKeyword);
+	public List<Article> getArticles(Map<String, Object> param) {
+		return articleDao.getArticles(param);
 	}
 
-	public ResultData add(String title, String body) {
-		int id = 1;
+	public ResultData addArticle(Map<String, Object> param) {		
+		articleDao.addArticle(param);
 		
-		articleDao.addArticle(title, body);		
+		int id = Util.getAsInt(param.get("id"), 0);
 		
 		return new ResultData("S-1", "게시물이 등록되었습니다.", "id", id);
 	}
 
-	public ResultData deleteArticle(int id) {		
-		boolean rs = true;
-		articleDao.deleteArticle(id);
+	public ResultData deleteArticle(Map<String, Object> param) {		
+		articleDao.deleteArticle(param);
 		
-		if(rs == false) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
-		}
-		
-		return new ResultData("S-1", "게시물이 삭제되었습니다.", "id", id);
+		return new ResultData("S-1", "게시물이 삭제되었습니다.", "id", param.get("id"));
 	}
 
-	public ResultData modifyArticle(int id, String title, String body) {
-		boolean rs = true;
-		articleDao.modifyArticle(id, title, body);
+	public ResultData modifyArticle(Map<String, Object> param) {
+		articleDao.modifyArticle(param);
 		
-		if(rs == false) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
-		}
-		
-		return new ResultData("S-1", "%게시물이 수정되었습니다.", "id", id);
+		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", param.get("id"));
 	}
 
 }
