@@ -19,19 +19,19 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
 	public List<Article> showList(String searchKeywordType, String searchKeyword) {
-		if( searchKeywordType != null ) {
+		if(searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
 		}
 		
-		if( searchKeywordType == null || searchKeywordType.length() == 0 ) {
+		if(searchKeywordType == null || searchKeywordType.length() == 0) {
 			searchKeywordType = "titleAndBody";
 		}
 		
-		if( searchKeyword != null && searchKeyword.length() == 0 ) {
+		if(searchKeyword != null && searchKeyword.length() == 0) {
 			searchKeyword = null;
 		}
 		
-		if( searchKeyword != null ) {
+		if(searchKeyword != null) {
 			searchKeyword = searchKeyword.trim();
 		}
 		
