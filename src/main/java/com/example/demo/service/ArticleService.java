@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dao.ArticleDao;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.ResultData;
-import com.example.demo.servdao.ArticleDao;
 
 @Service
 public class ArticleService {
@@ -16,21 +16,24 @@ public class ArticleService {
 	private ArticleDao articleDao;
 	
 	public Article getArticleById(int id) {		
-		return articleDao.getArticleById(id);
+		return articleDao.getArticle(id);
 	}
 
 	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
-		return articleDao.getArticle(searchKeywordType, searchKeyword);
+		return articleDao.getArticles(searchKeywordType, searchKeyword);
 	}
 
 	public ResultData add(String title, String body) {
-		int id = articleDao.addArticle(title, body);		
+		int id = 1;
+		
+		articleDao.addArticle(title, body);		
 		
 		return new ResultData("S-1", "게시물이 등록되었습니다.", "id", id);
 	}
 
 	public ResultData deleteArticle(int id) {		
-		boolean rs = articleDao.deleteArticle(id);
+		boolean rs = true;
+		articleDao.deleteArticle(id);
 		
 		if(rs == false) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
@@ -40,7 +43,8 @@ public class ArticleService {
 	}
 
 	public ResultData modifyArticle(int id, String title, String body) {
-		boolean rs = articleDao.modifyArticle(id, title, body);
+		boolean rs = true;
+		articleDao.modifyArticle(id, title, body);
 		
 		if(rs == false) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
