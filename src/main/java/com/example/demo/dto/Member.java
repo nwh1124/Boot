@@ -10,12 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Article {
+public class Member {
 		
 		private int id;
 		private String regDate;
 		private String updateDate;
-		private String title;
-		private String body;
+		private String loginId;
+		private String loginPw;
+		private String name;
+		private String nickname;
+		private String email;
+		private String phoneNumber;	
 
 }
