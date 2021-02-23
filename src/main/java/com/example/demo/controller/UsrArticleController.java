@@ -57,9 +57,19 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/detail")
 	@ResponseBody
-	public Article showDetail(@RequestParam Map<String, Object> param) {
-		Article article = articleService.getArticle(param);
-		return article;
+	public ResultData showDetail(Integer id) {
+		
+		if(id == null) {
+			return new ResultData("F-1", "게시물 번호를 입력해주세요.");
+		}
+		
+		Article article = articleService.getForPrintArticle(id);
+		
+		if(article == null) {
+			return new ResultData("F-2", String.format("%d번 게시물은 존재하지 않습니다.", id));
+		}
+		
+		return new ResultData("S-1", "성공", "article", article);
 	}
 	
 	@RequestMapping("/usr/article/doAdd")

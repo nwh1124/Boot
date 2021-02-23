@@ -14,4 +14,5 @@ public interface ArticleDao {
 	public void deleteArticle(Map<String, Object> param);
 	public void modifyArticle(Map<String, Object> param);
 	public List<Article> getArticles(Map<String, Object> param);
+	public Article getForPrintArticle(Integer id);
 }
