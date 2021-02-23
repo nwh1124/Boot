@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.Article;
+import com.example.demo.dto.Board;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.util.Util;
@@ -24,7 +25,13 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList(String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
+	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
+		
+		Board board = articleService.getBoard(boardId);
+		
+		if(board == null) {
+			return new ResultData("F-1", "존재하지 않는 게시판입니다.");
+		}
 		
 		if(searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
@@ -53,8 +60,11 @@ public class UsrArticleController {
 		param.put("searchKeyword", searchKeyword);
 		param.put("page", page);
 		param.put("itemsInAPage", itemsInAPage);
+		param.put("boardId", boardId);
 		
-		return articleService.getForPrintArticles(param);
+		List<Article> articles = articleService.getForPrintArticles(param);
+		
+		return new ResultData("S-1", "성공", "게시물 리스트", articles);
 	}
 	
 	@RequestMapping("/usr/article/detail")

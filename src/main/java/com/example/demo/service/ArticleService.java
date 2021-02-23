@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.ArticleDao;
 import com.example.demo.dto.Article;
+import com.example.demo.dto.Board;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
 
@@ -74,6 +75,10 @@ public class ArticleService {
 
 	public Article getForPrintArticle(Integer id) {		
 		return articleDao.getForPrintArticle(id);
+	}
+
+	public Board getBoard(int id) {		
+		return articleDao.getBoard(id);
 	}
 
 }
