@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,10 @@ public class UsrReplyController {
 	@ResponseBody
 	public ResultData showList(String relTypeCode, Integer relId) {
 		
+		if(relTypeCode == null) {
+			return new ResultData("F-1", "관련 타입 코드를 입력해주세요.");
+		}
+		
 		if(relId == null) {
 			return new ResultData("F-1", "관련 타입 번호를 입력해주세요.");
 		}
@@ -63,6 +68,30 @@ public class UsrReplyController {
 		List<Reply> replies = replyService.getForPrintReplies(relTypeCode, relId);
 		
 		return new ResultData("S-1", "성공", "replies", replies);
+	}
+	
+	@RequestMapping("/usr/reply/doDelete")
+	@ResponseBody
+	public ResultData doDelete(Integer id, HttpServletRequest req) {
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		
+		if(id == null) {
+			return new ResultData("F-1", "id를 입력해주세요.");
+		}
+		
+		Reply reply = replyService.getForPrintReply(id);
+		
+		if(reply == null) {
+			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
+		}
+		
+		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedMemberId);
+		
+		if(actorCanDeleteRd.isFail()){
+			return actorCanDeleteRd;
+		}
+		
+		return replyService.deleteReply(id);
 	}
 
 }

@@ -12,6 +12,8 @@ import com.example.demo.dto.Reply;
 public interface ReplyDao {
 
 	public void addReply(Map<String, Object> param);
-	public List<Reply> getForPrintReplies(@Param("relTypeCode") String relTypeCode, @Param("relId") Integer relId); 
+	public List<Reply> getForPrintReplies(@Param("relTypeCode") String relTypeCode, @Param("relId") Integer relId);
+	public Reply getForPrintReply(@Param("id") Integer id);
+	public void deleteReply(Integer id); 
 
 }

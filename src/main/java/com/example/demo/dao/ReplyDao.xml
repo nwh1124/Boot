@@ -22,5 +22,17 @@
 		AND relTypeCode = #{relTypeCode}
 		AND relId = #{relId}
 	</select>
+	
+	<select id="getForPrintReply" resultType="Reply">
+		SELECT *
+		FROM reply
+		WHERE 1
+		AND id = #{id}		
+	</select>
+	
+	<delete id="deleteReply">
+		DELETE FROM reply
+		WHERE id = #{id}
+	</delete>
 
 </mapper>

@@ -17,6 +17,8 @@ import com.example.demo.util.Util;
 public class ReplyService {
 	@Autowired
 	ReplyDao replyDao;
+	@Autowired
+	MemberService memberService;
 
 	public ResultData addReply(Map<String, Object> param, HttpSession session) {
 		replyDao.addReply(param);
@@ -28,6 +30,28 @@ public class ReplyService {
 
 	public List<Reply> getForPrintReplies(String relTypeCode, Integer relId) {
 		return replyDao.getForPrintReplies(relTypeCode, relId);
+	}
+
+	public Reply getForPrintReply(Integer id) {
+		return replyDao.getForPrintReply(id);
+	}
+
+	public ResultData getActorCanDeleteRd(Reply reply, int actorId) {
+		if(reply.getMemberId() == actorId) {
+			return new ResultData("S-1", "가능합니다.");
+		}
+		
+		if(memberService.isAdmin(actorId)) {
+			return new ResultData("S-1", "가능합니다.");
+		}
+		
+		return new ResultData("F-1", "권한이 없습니다.");
+	}
+
+	public ResultData deleteReply(Integer id) {
+		replyDao.deleteReply(id);
+		
+		return new ResultData("S-1", "삭제되었습니다.", "id", id);
 	}
 
 }
