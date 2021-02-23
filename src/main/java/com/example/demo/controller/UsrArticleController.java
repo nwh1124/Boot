@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
+import com.example.demo.util.Util;
 
 @Controller
 public class UsrArticleController {
@@ -61,7 +64,13 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
-	public ResultData doAdd(@RequestParam Map<String, Object> param) {
+	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpSession session) {
+		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+		
+		if(loginedMemberId == 0) {
+			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		}
+		
 		if(param.get("title") == null) {
 			return new ResultData("F-1", "title을 입력해주세요.");
 		}
@@ -69,12 +78,20 @@ public class UsrArticleController {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 		
+		param.put("memberId", loginedMemberId);
+		
 		return articleService.addArticle(param);
 	}
 	
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData doDelete(@RequestParam Map<String, Object> param) {
+	public ResultData doDelete(@RequestParam Map<String, Object> param, HttpSession session) {
+		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+		
+		if(loginedMemberId == 0) {
+			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		}
+		
 		if(param.get("id") == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
@@ -85,12 +102,24 @@ public class UsrArticleController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", param.get("id"));
 		}
 		
+		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMemberId);
+		
+		if(actorCanDeleteRd.isFail()) {
+			return actorCanDeleteRd;
+		}
+		
 		return articleService.deleteArticle(param);
 	}
 	
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData doModify(@RequestParam Map<String, Object> param) {
+	public ResultData doModify(@RequestParam Map<String, Object> param, HttpSession session) {
+		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+		
+		if(loginedMemberId == 0) {
+			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		}
+		
 		if(param.get("id") == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
@@ -102,6 +131,12 @@ public class UsrArticleController {
 		
 		if(article == null) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", param.get("id"));
+		}
+		
+		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedMemberId);
+		
+		if(actorCanModifyRd.isFail()) {
+			return actorCanModifyRd;
 		}
 		
 		return articleService.modifyArticle(param);
