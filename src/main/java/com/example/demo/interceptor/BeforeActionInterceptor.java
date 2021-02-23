@@ -17,8 +17,6 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	MemberService memberService;
 	
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-	
-		System.out.println("프리핸들러 체크");
 		
 		HttpSession session = request.getSession();
 		
