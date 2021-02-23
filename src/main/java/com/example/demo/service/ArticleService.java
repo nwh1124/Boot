@@ -23,8 +23,17 @@ public class ArticleService {
 		return articleDao.getArticle(param);
 	}
 
-	public List<Article> getArticles(Map<String, Object> param) {
-		return articleDao.getArticles(param);
+	public List<Article> getForPrintArticles(Map<String, Object> param) {
+		int page = (int)param.get("page");
+		int itemsInAPage = (int)param.get("itemsInAPage");
+		
+		int limitStart = (page - 1) * itemsInAPage;
+		int limitTake = itemsInAPage;
+		
+		param.put("limitStart", limitStart);
+		param.put("limitTake", limitTake);
+		
+		return articleDao.getForPrintArticles(param);
 	}
 
 	public ResultData addArticle(Map<String, Object> param) {		

@@ -23,7 +23,7 @@
 	<!-- public List<Article> getArticles(@Param(value = "searchKeywordType") 
 		String searchKeywordType, @Param(value = "searchKeyword") String searchKeyword); -->
 
-	<select id="getArticles" resultType="Article">
+	<select id="getForPrintArticles" resultType="Article">
 		SELECT A.*,
 		IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer
 		FROM article AS A
@@ -41,6 +41,9 @@
 			OR `body` LIKE CONCAT('%', #{searchKeyword}, '%'))
 		</if>
 		ORDER BY id DESC
+		<if test="limitStart != null and limitTake != null">
+			LIMIT #{limitStart}, #{limitTake}
+		</if>
 	</select>
 
 	<insert id="addArticle" useGeneratedKeys="true" keyProperty="id">

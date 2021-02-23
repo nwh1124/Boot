@@ -13,6 +13,6 @@ public interface ArticleDao {
 	public void addArticle(Map<String, Object> param);
 	public void deleteArticle(Map<String, Object> param);
 	public void modifyArticle(Map<String, Object> param);
-	public List<Article> getArticles(Map<String, Object> param);
+	public List<Article> getForPrintArticles(Map<String, Object> param);
 	public Article getForPrintArticle(Integer id);
 }

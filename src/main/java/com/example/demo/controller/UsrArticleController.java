@@ -24,7 +24,7 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList(String searchKeywordType, String searchKeyword) {
+	public List<Article> showList(String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 		
 		if(searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
@@ -46,13 +46,15 @@ public class UsrArticleController {
 			searchKeyword = searchKeyword.trim();
 		}
 		
+		int itemsInAPage = 20;
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("searchKeywordType", searchKeywordType);
 		param.put("searchKeyword", searchKeyword);
+		param.put("page", page);
+		param.put("itemsInAPage", itemsInAPage);
 		
-		System.out.println(param);
-		
-		return articleService.getArticles(param);
+		return articleService.getForPrintArticles(param);
 	}
 	
 	@RequestMapping("/usr/article/detail")
