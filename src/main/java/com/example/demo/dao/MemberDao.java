@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.dto.Member;
+import com.example.demo.dto.ResultData;
 
 @Mapper
 public interface MemberDao {
@@ -13,5 +14,6 @@ public interface MemberDao {
 	public void doJoin(Map<String, Object> param);
 	public Member getMember(@Param("id") int id);
 	public Member getMemberByLoginId(@Param("loginId") String loginId);
+	public void modifyMember(Map<String, Object> param);
 
 }

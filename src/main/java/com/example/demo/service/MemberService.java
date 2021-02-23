@@ -32,4 +32,10 @@ public class MemberService {
 		return new ResultData("S-1", "회원 가입이 완료되었습니다.", "id", id);
 	}
 
+	public ResultData modifyMember(Map<String, Object> param) {
+		memberDao.modifyMember(param);
+		
+		return new ResultData("S-1", "회원 정보가 수정되었습니다.");
+	}
+
 }

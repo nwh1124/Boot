@@ -32,5 +32,30 @@
 		WHERE 1
 		AND loginId = #{loginId}
 	</select>
+	
+	<update id="modifyMember">
+		UPDATE member
+		<set>
+			<if test="loginPw != null || name != null || nickname != null || phoneNumber != null || email != null">
+				updateDate = NOW(),
+			</if>
+			<if test="loginPw != null">
+				loginPw = #{loginPw},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="nickname != null">
+				name = #{nickname},
+			</if>
+			<if test="phoneNumber">
+				phoneNumber = #{phoneNumber},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
 
 </mapper>
