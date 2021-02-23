@@ -4,9 +4,15 @@ import java.util.Map;
 
 import com.example.demo.util.Util;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+
+//생성자 자동 생성
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResultData {
 	
 	private String resultCode;
