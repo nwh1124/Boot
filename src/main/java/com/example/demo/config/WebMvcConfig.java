@@ -35,6 +35,12 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		// beforeActionInterceptor 인터셉터가 모든 액션 실행전에 실행되도록 처리
 		registry.addInterceptor(beforeActionInterceptor).addPathPatterns("/**").excludePathPatterns("/resource/**");
+
+		// 어드민 필요
+		registry.addInterceptor(needAdminInterceptor)
+			.addPathPatterns("/adm/**")
+			.excludePathPatterns("/adm/member/login")
+			.excludePathPatterns("/adm/member/doLogin");
 		
 		// 로그인 필요 인터셉터
 		registry.addInterceptor(needLoginInterceptor)
@@ -43,8 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/adm/**")
 				.excludePathPatterns("/resource/**")
 				.excludePathPatterns("/usr/home/main")
-				.excludePathPatterns("/usr/adm/login")
-				.excludePathPatterns("/usr/adm/doLogin")
+				.excludePathPatterns("/usr/member/authKey")
 				.excludePathPatterns("/usr/member/login")
 				.excludePathPatterns("/usr/member/doLogin")
 				.excludePathPatterns("/usr/member/join")
@@ -62,6 +67,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/error");
 		
 		registry.addInterceptor(needLogoutInterceptor)
+			.addPathPatterns("/usr/adm/login")
+			.addPathPatterns("/usr/adm/doLogin")
 				.addPathPatterns("/usr/member/login")
 				.addPathPatterns("/usr/member/doLogin")
 				.addPathPatterns("/usr/member/join")

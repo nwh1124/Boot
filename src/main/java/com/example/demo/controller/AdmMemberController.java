@@ -50,6 +50,11 @@ public class AdmMemberController {
 		return memberService.doJoin(param);
 	}	
 	
+	@RequestMapping("/adm/member/login")
+	public String login() {
+		return "adm/member/login";
+	}
+	
 	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpServletRequest req) {
