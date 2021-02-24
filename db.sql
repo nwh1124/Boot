@@ -8,9 +8,10 @@ CREATE TABLE article (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
+    boardId SMALLINT(2) NOT NULL DEFAULT 1,
+    memberId SMALLINT(2) NOT NULL DEFAULT 1,
     title CHAR(100) NOT NULL,
-    `body` TEXT NOT NULL,
-    memberId SMALLINT(2) NOT NULL DEFAULT 1
+    `body` TEXT NOT NULL
 );
 
 # 게시물, 테스트 데이터 생성
@@ -123,17 +124,23 @@ updateDate = NOW(),
 `code` = 'free',
 `name` = '자유';
 
-# 게시물 테이블에 게시판 번호 칼럼 추가, updateDate 칼럼 뒤에
-ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER updateDate;
-
 # 기존 데이터를 랜덤하게 게시판 지정
 UPDATE article
 SET boardId = FLOOR(RAND() * 2) + 1
 WHERE boardId = 0;
 
-SELECT A.*,
-IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer
-FROM article AS A
-LEFT JOIN `member` AS M
-ON A.memberId = M.id
-ORDER BY id DESC
+
+# authKey 칼럼 추가
+ALTER TABLE `member` ADD COLUMN authKey CHAR(80) NOT NULL AFTER loginPw;
+
+# 기존 회원의 authKey 데이터 채우기
+UPDATE `member`
+SET authKey = CONCAT("authKey1__", UUID(), "__", RAND())
+WHERE authKey = '';
+
+# authKey 칼럼에 유니크 인덱스 추가
+ALTER TABLE `Boot`.`member` ADD UNIQUE INDEX(`authKey`);
+
+
+SELECT *
+FROM `member`
