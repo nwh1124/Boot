@@ -42,4 +42,8 @@ public class MemberService {
 		return actorId == 1;
 	}
 
+	public boolean isAdmin(Member actor) {
+		return isAdmin(actor.getId());
+	}
+
 }

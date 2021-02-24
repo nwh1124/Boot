@@ -18,11 +18,11 @@ import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 
 @Controller
-public class UsrArticleController {
+public class AdmArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-	@RequestMapping("/usr/article/list")
+	@RequestMapping("/adm/article/list")
 	@ResponseBody
 	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 		
@@ -63,10 +63,10 @@ public class UsrArticleController {
 		
 		List<Article> articles = articleService.getForPrintArticles(param);
 		
-		return new ResultData("S-1", "성공", "게시물 리스트", articles);
+		return new ResultData("S-1", "성공", "articles", articles);
 	}
 	
-	@RequestMapping("/usr/article/detail")
+	@RequestMapping("/adm/article/detail")
 	@ResponseBody
 	public ResultData showDetail(Integer id) {
 		
@@ -83,7 +83,7 @@ public class UsrArticleController {
 		return new ResultData("S-1", "성공", "article", article);
 	}
 	
-	@RequestMapping("/usr/article/doAdd")
+	@RequestMapping("/adm/article/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
@@ -100,19 +100,20 @@ public class UsrArticleController {
 		return articleService.addArticle(param);
 	}
 	
-	@RequestMapping("/usr/article/doDelete")
+	@RequestMapping("/adm/article/doDelete")
 	@ResponseBody
 	public ResultData doDelete(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		Integer id = (Integer) param.get("id");
 		
-		if(param.get("id") == null) {
+		if(id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 		
 		Article article = articleService.getArticle(param);
 		
 		if(article == null) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", param.get("id"));
+			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 		
 		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMemberId);
@@ -124,7 +125,7 @@ public class UsrArticleController {
 		return articleService.deleteArticle(param);
 	}
 	
-	@RequestMapping("/usr/article/doModify")
+	@RequestMapping("/adm/article/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");

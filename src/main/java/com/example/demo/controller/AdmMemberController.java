@@ -15,11 +15,11 @@ import com.example.demo.dto.ResultData;
 import com.example.demo.service.MemberService;
 
 @Controller
-public class UsrMemberController {
+public class AdmMemberController {
 	@Autowired
 	private MemberService memberService;
 	
-	@RequestMapping("/usr/member/doJoin")
+	@RequestMapping("/adm/member/doJoin")
 	@ResponseBody
 	public ResultData doJoin(@RequestParam Map<String, Object> param) {
 		if(param.get("loginId") == null) {
@@ -50,7 +50,7 @@ public class UsrMemberController {
 		return memberService.doJoin(param);
 	}	
 	
-	@RequestMapping("/usr/member/doLogin")
+	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpServletRequest req) {
 		if(loginId == null) {
@@ -75,7 +75,7 @@ public class UsrMemberController {
 		return new ResultData("S-1", String.format("%s님 환영합니다!", existingMember.getNickname()));
 	}
 	
-	@RequestMapping("/usr/member/doLogout")
+	@RequestMapping("/adm/member/doLogout")
 	@ResponseBody
 	public ResultData doLogout(HttpServletRequest req) {
 		req.removeAttribute("loginedMemberId");
@@ -83,7 +83,7 @@ public class UsrMemberController {
 		return new ResultData("S-1", "로그아웃 되었습니다.");
 	}
 	
-	@RequestMapping("/usr/member/doModify")
+	@RequestMapping("/adm/member/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		if(param.isEmpty()) {

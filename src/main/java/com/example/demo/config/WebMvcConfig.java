@@ -13,16 +13,21 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Autowired
 	@Qualifier("beforeActionInterceptor")
 	HandlerInterceptor beforeActionInterceptor;
+	
+	// needAdminInterceptor 관리자 권한 인터셉터 불러오기
+	@Autowired
+	@Qualifier("needAdminInterceptor")
+	HandlerInterceptor needAdminInterceptor;
 
 	// needToLoginInterceptor 로그인 필요 인터셉터 불러오기
 	@Autowired
-	@Qualifier("needToLoginInterceptor")
-	HandlerInterceptor needToLoginInterceptor;
+	@Qualifier("needLoginInterceptor")
+	HandlerInterceptor needLoginInterceptor;
 
 	// needToLogoutInterceptor 로그인 필요 인터셉터 불러오기
 	@Autowired
-	@Qualifier("needToLogoutInterceptor")
-	HandlerInterceptor needToLogoutInterceptor;
+	@Qualifier("needLogoutInterceptor")
+	HandlerInterceptor needLogoutInterceptor;
 	
 
 	// 이 함수는 인터셉터를 적용하는 역할을 합니다.
@@ -32,11 +37,14 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		registry.addInterceptor(beforeActionInterceptor).addPathPatterns("/**").excludePathPatterns("/resource/**");
 		
 		// 로그인 필요 인터셉터
-		registry.addInterceptor(needToLoginInterceptor)
+		registry.addInterceptor(needLoginInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns("/")
+				.excludePathPatterns("/adm/**")
 				.excludePathPatterns("/resource/**")
 				.excludePathPatterns("/usr/home/main")
+				.excludePathPatterns("/usr/adm/login")
+				.excludePathPatterns("/usr/adm/doLogin")
 				.excludePathPatterns("/usr/member/login")
 				.excludePathPatterns("/usr/member/doLogin")
 				.excludePathPatterns("/usr/member/join")
@@ -53,7 +61,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/test/**")
 				.excludePathPatterns("/error");
 		
-		registry.addInterceptor(needToLogoutInterceptor)
+		registry.addInterceptor(needLogoutInterceptor)
 				.addPathPatterns("/usr/member/login")
 				.addPathPatterns("/usr/member/doLogin")
 				.addPathPatterns("/usr/member/join")

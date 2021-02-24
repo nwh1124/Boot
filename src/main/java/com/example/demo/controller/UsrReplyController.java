@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import com.example.demo.dto.Reply;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.ReplyService;
-import com.example.demo.util.Util;
 
 @Controller
 public class UsrReplyController {
@@ -28,7 +26,7 @@ public class UsrReplyController {
 	
 	@RequestMapping("/usr/reply/doAdd")
 	@ResponseBody
-	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpSession session) {
+	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		if(param.get("relTypeCode") == null) {
 			return new ResultData("F-1", "관련 타입 코드를 입력해주세요.");
 		}
@@ -36,11 +34,11 @@ public class UsrReplyController {
 			return new ResultData("F-1", "댓글 내용을 입력해주세요.");
 		}
 		
-		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		
 		param.put("memberId", loginedMemberId);
 		
-		return replyService.addReply(param, session);
+		return replyService.addReply(param, req);
 		
 	}
 	

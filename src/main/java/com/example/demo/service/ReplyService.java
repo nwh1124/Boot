@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ReplyService {
 	@Autowired
 	MemberService memberService;
 
-	public ResultData addReply(Map<String, Object> param, HttpSession session) {
+	public ResultData addReply(Map<String, Object> param, HttpServletRequest req) {
 		replyDao.addReply(param);
 		
 		int id = Util.getAsInt(param.get("id"), 0);
