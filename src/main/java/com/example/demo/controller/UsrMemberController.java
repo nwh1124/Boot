@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,7 +53,7 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public ResultData doLogin(String loginId, String loginPw, HttpServletRequest req) {
+	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
 		if(loginId == null) {
 			return new ResultData("F-1", "아이디를 입력해주세요.");
 		}
@@ -70,15 +71,15 @@ public class UsrMemberController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 		
-		req.setAttribute("loginedMemberId", existingMember.getId());
+		session.setAttribute("loginedMemberId", existingMember.getId());
 		
 		return new ResultData("S-1", String.format("%s님 환영합니다!", existingMember.getNickname()));
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public ResultData doLogout(HttpServletRequest req) {
-		req.removeAttribute("loginedMemberId");
+	public ResultData doLogout(HttpSession session) {
+		session.removeAttribute("loginedMemberId");
 		
 		return new ResultData("S-1", "로그아웃 되었습니다.");
 	}

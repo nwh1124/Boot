@@ -62,8 +62,7 @@ public class UsrArticleController {
 		param.put("boardId", boardId);
 		
 		List<Article> articles = articleService.getForPrintArticles(param);
-		
-		return new ResultData("S-1", "성공", "게시물 리스트", articles);
+		return new ResultData("S-1", "성공", "articles", articles);
 	}
 	
 	@RequestMapping("/usr/article/detail")
