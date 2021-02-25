@@ -126,7 +126,7 @@ updateDate = NOW(),
 
 # 기존 데이터를 랜덤하게 게시판 지정
 UPDATE article
-SET boardId = FLOOR(RAND() * 2) + 1
+SET boardId = FLOOR(RAND() * 2) + 1;
 
 
 # authKey 칼럼 추가
@@ -148,4 +148,4 @@ ALTER TABLE `Boot`.`member` ADD UNIQUE INDEX(`authKey`);
 
 SELECT *
 FROM `member`
-order by id desc
+ORDER BY id DESC
