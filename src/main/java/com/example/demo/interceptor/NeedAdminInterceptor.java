@@ -23,7 +23,9 @@ public class NeedAdminInterceptor implements HandlerInterceptor {
 				response.setContentType("text/html; charset=UTF-8");
 				response.getWriter().append("<script>");
 				response.getWriter().append("alert('관리자만 이용할 수 있습니다.')");
-				response.getWriter().append("location.replace('/usr/home/main');");
+				response.getWriter().append("location.replace('/adm/member/login?"
+						+ request.getAttribute("encodedAfterLoginUrl")
+						+ "');");
 				response.getWriter().append("</script>");
 			}
 			else {

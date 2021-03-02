@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,48 +61,55 @@ public class AdmMemberController {
 	
 	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
-	public ResultData doLogin(String loginId, String loginPw, HttpServletRequest req) {
+	public String doLogin(String loginId, String loginPw, String redirectUrl, HttpServletRequest req) {
 		if(loginId == null) {
-			return new ResultData("F-1", "아이디를 입력해주세요.");
+			return Util.msgAndBack("아이디를 입력해주세요.");
 		}
 		if(loginPw == null) {
-			return new ResultData("F-1", "비밀번호를 입력해주세요.");
+			return Util.msgAndBack("비밀번호를 입력해주세요.");
 		}
 		
 		Member existingMember = memberService.getMemberByLoginId(loginId);
 		
 		if(existingMember == null) {
-			return new ResultData("F-2", "존재하지 않는 아이디입니다.");
+			return Util.msgAndBack("존재하지 않는 아이디입니다.");
 		}
 		
 		if(existingMember.getLoginPw().equals(loginPw) == false) {
-			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 		
 		req.setAttribute("loginedMemberId", existingMember.getId());
 		
-		return new ResultData("S-1", String.format("%s님 환영합니다!", existingMember.getNickname()));
+		String msg = String.format("%s님 환영합니다!", existingMember.getNickname()); 
+		
+		if(redirectUrl == null) {
+			return Util.msgAndReplace(msg, "../home/main");
+		}
+		
+		return Util.msgAndReplace(msg, redirectUrl);
 	}
 	
 	@RequestMapping("/adm/member/doLogout")
 	@ResponseBody
-	public ResultData doLogout(HttpServletRequest req) {
-		req.removeAttribute("loginedMemberId");
+	public String doLogout(HttpSession session) {
+		session.removeAttribute("loginedMemberId");
 		
-		return new ResultData("S-1", "로그아웃 되었습니다.");
+		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
 	
 	@RequestMapping("/adm/member/doModify")
 	@ResponseBody
-	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public String doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		if(param.isEmpty()) {
-			return new ResultData("F-2", "수정할 정보를 입력해주세요.");
+			return Util.msgAndBack("수정할 정보를 입력해주세요.");
 		}
 		
 		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		param.put("id", loginedMemberId);
 		
-		return memberService.modifyMember(param);
+		ResultData rdMsg = memberService.modifyMember(param);
+		return Util.msgAndBack(rdMsg.getMsg());
 	}
 
 }

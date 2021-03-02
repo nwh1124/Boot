@@ -1,5 +1,7 @@
 package com.example.demo.interceptor;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.example.demo.dto.Member;
 import com.example.demo.service.MemberService;
+import com.example.demo.util.Util;
 
 @Component("beforeActionInterceptor") // 컴포넌트 이름 설정
 public class BeforeActionInterceptor implements HandlerInterceptor {
@@ -17,6 +20,30 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	MemberService memberService;
 	
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+		
+		// request에 정보를 담기
+		// 현재 가지고 있는 파라미터들을 모두 param에 받음
+		Map<String, Object> param = Util.getParamMap(request);
+		String paramJson = Util.toJsonStr(param);
+		
+		// 아래 두 문자열을 합치면 URI가 된...다?
+		String requestUrl = request.getRequestURI();
+		String queryString = request.getQueryString();
+		
+		if(queryString != null && queryString.length() > 0) {
+			requestUrl += "?" + queryString;
+		}
+		
+		String encodedRequestUrl = Util.getEncoded(requestUrl);
+
+		request.setAttribute("requestUrl", requestUrl);
+		request.setAttribute("encodedRequestUrl", encodedRequestUrl);
+		
+		request.setAttribute("afterLoginUrl", requestUrl);
+		request.setAttribute("encodedAfterLoginUrl", encodedRequestUrl);
+		
+		request.setAttribute("paramMap", param);
+		request.setAttribute("paramJson", paramJson);
 		
 		int loginedMemberId = 0;
 		Member loginedMember = null;
