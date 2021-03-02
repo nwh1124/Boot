@@ -78,15 +78,15 @@ public class AdmMemberController {
 		if(existingMember.getLoginPw().equals(loginPw) == false) {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
-		
+
 		req.setAttribute("loginedMemberId", existingMember.getId());
 		
 		String msg = String.format("%s님 환영합니다!", existingMember.getNickname()); 
 		
-		if(redirectUrl == null) {
+		if(redirectUrl.isEmpty()) {
 			return Util.msgAndReplace(msg, "../home/main");
 		}
-		
+
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 	
