@@ -17,7 +17,7 @@ import com.example.demo.service.MemberService;
 import com.example.demo.util.Util;
 
 @Controller
-public class AdmMemberController {
+public class AdmMemberController{
 	@Autowired
 	private MemberService memberService;
 	

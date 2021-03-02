@@ -18,18 +18,17 @@ import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 
 @Controller
-public class AdmArticleController {
+public class AdmArticleController extends BaseController{
 	@Autowired
 	private ArticleService articleService;
 	
 	@RequestMapping("/adm/article/list")
-	@ResponseBody
-	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
+	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 		
 		Board board = articleService.getBoard(boardId);
 		
 		if(board == null) {
-			return new ResultData("F-1", "존재하지 않는 게시판입니다.");
+			return msgAndBack(req, "존재하지 않는 게시판입니다.");
 		}
 		
 		if(searchKeywordType != null) {
@@ -61,9 +60,10 @@ public class AdmArticleController {
 		param.put("itemsInAPage", itemsInAPage);
 		param.put("boardId", boardId);
 		
-		List<Article> articles = articleService.getForPrintArticles(param);
+		List<Article> articles = articleService.getForPrintArticles(param);		
+		req.setAttribute("articles", articles);
 		
-		return new ResultData("S-1", "성공", "articles", articles);
+		return "adm/article/list";
 	}
 	
 	@RequestMapping("/adm/article/detail")
