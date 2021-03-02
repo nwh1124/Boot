@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.dto.Member;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.MemberService;
+import com.example.demo.util.Util;
 
 @Controller
 public class AdmMemberController {
@@ -21,33 +22,35 @@ public class AdmMemberController {
 	
 	@RequestMapping("/adm/member/doJoin")
 	@ResponseBody
-	public ResultData doJoin(@RequestParam Map<String, Object> param) {
+	public String doJoin(@RequestParam Map<String, Object> param) {
 		if(param.get("loginId") == null) {
-			return new ResultData("F-1", "아이디를 입력해주세요.");
+			return Util.msgAndBack("loginId를 입력해주세요.");
 		}
 		if(param.get("loginPw") == null) {
-			return new ResultData("F-1", "비밀번호를 입력해주세요.");
+			return Util.msgAndBack("비밀번호를 입력해주세요.");
 		}
 		if(param.get("name") == null) {
-			return new ResultData("F-1", "이름을 입력해주세요.");
+			return Util.msgAndBack("이름을 입력해주세요.");
 		}
 		if(param.get("nickname") == null) {
-			return new ResultData("F-1", "닉네임을 입력해주세요.");
+			return Util.msgAndBack("닉네임을 입력해주세요.");
 		}
 		if(param.get("email") == null) {
-			return new ResultData("F-1", "이메일을 입력해주세요.");
+			return Util.msgAndBack("이메일을 입력해주세요.");
 		}
 		if(param.get("phoneNumber") == null) {
-			return new ResultData("F-1", "휴대폰 번호를 입력해주세요.");
+			return Util.msgAndBack("휴대폰 번호를 입력해주세요.");
 		}
 		
 		Member existingMember = memberService.getMemberByLoginId((String)param.get("loginId"));
 		
 		if(existingMember != null) {
-			return new ResultData("F-2", String.format("%s는 이미 존재하는 아이디입니다.", param.get("loginId")));
+			return Util.msgAndBack(String.format("%s는 이미 존재하는 아이디입니다.", param.get("loginId")));
 		}
 		
-		return memberService.doJoin(param);
+		String msg = String.format("%s님 환영합니다.", existingMember.getNickname());
+		
+		return Util.msgAndReplace(msg, "../home/main");
 	}	
 	
 	@RequestMapping("/adm/member/login")

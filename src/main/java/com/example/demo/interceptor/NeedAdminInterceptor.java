@@ -16,7 +16,7 @@ public class NeedAdminInterceptor implements HandlerInterceptor {
 		// HttpServletRequest를 통해 모두 쓸 수 있음
 		
 		boolean isAdmin = (boolean) request.getAttribute("isAdmin");
-		boolean isAjax = true;
+		boolean isAjax = request.getParameter("isAjax") != null;
 		
 		if(isAdmin) {
 			if(isAjax == false) {
