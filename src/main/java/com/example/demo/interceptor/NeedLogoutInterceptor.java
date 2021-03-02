@@ -21,7 +21,7 @@ public class NeedLogoutInterceptor implements HandlerInterceptor {
 			if(isAjax == false) {
 				response.setContentType("text/html; charset=UTF-8");
 				response.getWriter().append("<script>");
-				response.getWriter().append("alert('로그인 후 이용해주세요.')");
+				response.getWriter().append("alert('로그인 후 이용해주세요.');");
 				response.getWriter().append("location.replace('/usr/home/main');");
 				response.getWriter().append("</script>");
 			}

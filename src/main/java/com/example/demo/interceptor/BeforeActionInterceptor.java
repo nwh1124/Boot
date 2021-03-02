@@ -72,6 +72,7 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			if(session.getAttribute("loginedMemberId") != null) {
 				loginedMemberId = (int) session.getAttribute("loginedMemberId");
 				loginedMember = memberService.getMember(loginedMemberId);
+				System.out.println(loginedMember.toString() + " 확인용");
 			}
 		}
 		

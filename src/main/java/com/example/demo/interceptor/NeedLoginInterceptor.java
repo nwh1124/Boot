@@ -32,7 +32,7 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 			if(isAjax == false) {
 				response.setContentType("text/html; charset=UTF-8");
 				response.getWriter().append("<script>");
-				response.getWriter().append("alert('" + resultMsg + ".')");
+				response.getWriter().append("alert('" + resultMsg + ".');");
 				response.getWriter().append("location.replace('/usr/member/login?redirectUri=" 
 						+ request.getAttribute("encodedAfterLoginUri") + "');");
 				response.getWriter().append("</script>");

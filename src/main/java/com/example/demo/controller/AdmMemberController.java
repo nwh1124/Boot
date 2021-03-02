@@ -61,7 +61,7 @@ public class AdmMemberController {
 	
 	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
-	public String doLogin(String loginId, String loginPw, String redirectUrl, HttpServletRequest req) {
+	public String doLogin(String loginId, String loginPw, String redirectUrl, HttpSession session) {
 		if(loginId == null) {
 			return Util.msgAndBack("아이디를 입력해주세요.");
 		}
@@ -79,13 +79,11 @@ public class AdmMemberController {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 
-		req.setAttribute("loginedMemberId", existingMember.getId());
+		session.setAttribute("loginedMemberId", existingMember.getId());
 		
 		String msg = String.format("%s님 환영합니다!", existingMember.getNickname()); 
 		
-		if(redirectUrl.isEmpty()) {
-			return Util.msgAndReplace(msg, "../home/main");
-		}
+		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
