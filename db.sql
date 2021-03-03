@@ -86,21 +86,6 @@ INSERT INTO article
 SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
 FROM article;
 
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
 # 게시판 테이블 추가
 CREATE TABLE board (
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -140,12 +125,28 @@ WHERE authKey = '';
 # USER1의 authKey 지정
 UPDATE `member`
 SET authKey = CONCAT("authKey1__1")
-WHERE id = 1
+WHERE id = 1;
 
 # authKey 칼럼에 유니크 인덱스 추가
 ALTER TABLE `Boot`.`member` ADD UNIQUE INDEX(`authKey`);
 
-
-SELECT *
-FROM `member`
-ORDER BY id DESC
+CREATE TABLE genFile (
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, # 번호
+  regDate DATETIME DEFAULT NULL, # 작성날짜
+  updateDate DATETIME DEFAULT NULL, # 갱신날짜
+  delDate DATETIME DEFAULT NULL, # 삭제날짜
+  delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0, # 삭제상태(0:미삭제,1:삭제)
+  relTypeCode CHAR(50) NOT NULL, # 관련 데이터 타입(article, member)
+  relId INT(10) UNSIGNED NOT NULL, # 관련 데이터 번호
+  originFileName VARCHAR(100) NOT NULL, # 업로드 당시의 파일이름
+  fileExt CHAR(10) NOT NULL, # 확장자
+  typeCode CHAR(20) NOT NULL, # 종류코드 (common)
+  type2Code CHAR(20) NOT NULL, # 종류2코드 (attatchment)
+  fileSize INT(10) UNSIGNED NOT NULL, # 파일의 사이즈
+  fileExtTypeCode CHAR(10) NOT NULL, # 파일규격코드(img, video)
+  fileExtType2Code CHAR(10) NOT NULL, # 파일규격2코드(jpg, mp4)
+  fileNo SMALLINT(2) UNSIGNED NOT NULL, # 파일번호 (1)
+  fileDir CHAR(20) NOT NULL, # 파일이 저장되는 폴더명
+  PRIMARY KEY (id),
+  KEY relId (relId,relTypeCode,typeCode,type2Code,fileNo)
+); 

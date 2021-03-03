@@ -11,25 +11,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.example.demo.dto.Article;
 import com.example.demo.dto.Board;
+import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.GenFileService;
+import com.example.demo.util.Util;
 
 @Controller
-public class AdmArticleController {
+public class AdmArticleController extends BaseController{
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private GenFileService genFileService;
 	
 	@RequestMapping("/adm/article/list")
-	@ResponseBody
-	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
+	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, 
+			String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 		
 		Board board = articleService.getBoard(boardId);
 		
+		req.setAttribute("board", board);
+		
 		if(board == null) {
-			return new ResultData("F-1", "존재하지 않는 게시판입니다.");
+			return msgAndBack(req, "존재하지 않는 게시판입니다.");
 		}
 		
 		if(searchKeywordType != null) {
@@ -63,7 +72,17 @@ public class AdmArticleController {
 		
 		List<Article> articles = articleService.getForPrintArticles(param);
 		
-		return new ResultData("S-1", "성공", "articles", articles);
+		for(Article article : articles) {
+			GenFile genFile = genFileService.getGenFile("article", article.getId(), "common", "attachment", 1);
+			
+			if(genFile != null) {
+				article.setExtra__thumbImg(genFile.getForPrintUrl());				
+			}
+		}
+		
+		req.setAttribute("articles", articles);
+		
+		return "adm/article/list";
 	}
 	
 	@RequestMapping("/adm/article/detail")
@@ -84,20 +103,39 @@ public class AdmArticleController {
 	}
 	
 	@RequestMapping("/adm/article/doAdd")
-	@ResponseBody
-	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public String doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req,
+			MultipartRequest multipartRequest) {
+		
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		
 		if(param.get("title") == null) {
-			return new ResultData("F-1", "title을 입력해주세요.");
+			return msgAndBack(req, "title을 입력해주세요.");
 		}
 		if(param.get("body") == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
+			return msgAndBack(req, "body를 입력해주세요.");
 		}
 		
 		param.put("memberId", loginedMemberId);
 		
-		return articleService.addArticle(param);
+		ResultData addArticleRd = articleService.addArticle(param);
+
+		int newArticleId = (int) addArticleRd.getBody().get("id");
+
+		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+
+		for (String fileInputName : fileMap.keySet()) {
+			MultipartFile multipartFile = fileMap.get(fileInputName);
+			if(multipartFile.isEmpty() == false) {
+				genFileService.save(multipartFile, newArticleId);
+			}
+		}
+
+		return msgAndReplace(req, String.format("%d번 게시물이 작성되었습니다.", newArticleId), "../article/detail?id=" + newArticleId);
+	}
+
+	@RequestMapping("/adm/article/add")
+	public String add(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+		return "adm/article/add";
 	}
 	
 	@RequestMapping("/adm/article/doDelete")
@@ -150,6 +188,6 @@ public class AdmArticleController {
 		}
 		
 		return articleService.modifyArticle(param);
-	}
+	}	
 
 }

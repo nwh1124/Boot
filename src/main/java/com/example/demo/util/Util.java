@@ -1,10 +1,20 @@
 package com.example.demo.util;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Util {
 	public static String getNowDateStr() {
@@ -60,4 +70,165 @@ public class Util {
 
 		return defaultValue;
 	}
+
+	public static String msgAndBack(String msg) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<script>");
+		sb.append("alert('" + msg + "');");
+		sb.append("history.back();");
+		sb.append("</script>");
+		
+		return sb.toString();
+	}
+
+	public static String msgAndReplace(String msg, String url) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<script>");
+		sb.append("alert('" + msg + "');");
+		sb.append("location.replace('" + url + "')");
+		sb.append("</script>");
+		
+		return sb.toString();
+	}
+
+	public static Map<String, Object> getParamMap(HttpServletRequest request) {
+		Map<String, Object> param = new HashMap<>();
+		
+		// request가 갖고 있는 파라메터의 이름들을 저장
+		Enumeration<String> parameterNames = request.getParameterNames();
+		
+		// request에 파라메터가 있을 경우에 파라메터의 수 만큼 반복
+		// param에 현재 파라미터들의 이름과 값을 모두 넣음
+		while(parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			Object paramValue = request.getParameter(paramName);
+			
+			param.put(paramName, paramValue);
+		}
+		
+		return param;
+	}
+
+	public static String toJsonStr(Map<String, Object> param) {
+		// 맵핑해주는 변수 선언
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(param);
+		}catch(JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return mapper.toString();
+	}
+
+	public static String getEncoded(String str) {
+		try {
+			return URLEncoder.encode(str, "UTF-8");
+		}catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return str;
+		}
+	}
+
+	public static boolean isEmpty(Object data) {
+		if (data == null) {
+			return true;
+		}
+
+		if (data instanceof String) {
+			String strData = (String) data;
+
+			return strData.trim().length() == 0;
+		} else if (data instanceof Integer) {
+			Integer integerData = (Integer) data;
+
+			return integerData != 0;
+		} else if (data instanceof List) {
+			List listData = (List) data;
+
+			return listData.isEmpty();
+		} else if (data instanceof Map) {
+			Map mapData = (Map) data;
+
+			return mapData.isEmpty();
+		}
+
+		return true;
+	}
+
+	public static <T> T ifEmpty(T data, T defaultValue) {
+		if ( isEmpty(data) ) {
+			return defaultValue;
+		}
+
+		return data;
+	}
+
+	public static <T> T ifNull(T data, T defaultValue) {
+		return data != null ? data : defaultValue;
+	}
+
+	public static <T> T reqAttr(HttpServletRequest req, String attrName, T defaultValue) {
+		return (T) ifNull(req.getAttribute(attrName), defaultValue);
+	}
+
+	public static String getFileExtTypeCodeFromFileName(String fileName) {
+		String ext = getFileExtFromFileName(fileName).toLowerCase();
+
+		switch (ext) {
+		case "jpeg":
+		case "jpg":
+		case "gif":
+		case "png":
+			return "img";
+		case "mp4":
+		case "avi":
+		case "mov":
+			return "video";
+		case "mp3":
+			return "audio";
+		}
+
+		return "etc";
+	}
+
+	public static String getFileExtType2CodeFromFileName(String fileName) {
+		String ext = getFileExtFromFileName(fileName).toLowerCase();
+
+		switch (ext) {
+		case "jpeg":
+		case "jpg":
+			return "jpg";
+		case "gif":
+			return ext;
+		case "png":
+			return ext;
+		case "mp4":
+			return ext;
+		case "mov":
+			return ext;
+		case "avi":
+			return ext;
+		case "mp3":
+			return ext;
+		}
+
+		return "etc";
+	}
+
+	public static String getFileExtFromFileName(String fileName) {
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos + 1);
+
+		return ext;
+	}
+
+	public static String getNowYearMonthDateStr() {
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy_MM");
+
+		String dateStr = format1.format(System.currentTimeMillis());
+
+		return dateStr;
+	}
+	
+	
 }

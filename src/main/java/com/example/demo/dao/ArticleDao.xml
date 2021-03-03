@@ -13,10 +13,13 @@
 	
 	<select id="getForPrintArticle" resultType="Article">
 		SELECT A.*,
-		IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer
+		IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer,
+		B.name as extra__boardName
 		FROM article as A
 		LEFT JOIN `member` AS M
 		ON A.memberId = M.id
+		LEFT JOIN `board` as B
+		ON A.boardId = B.id
 		WHERE A.id = #{id}		
 	</select>
 
@@ -25,10 +28,13 @@
 
 	<select id="getForPrintArticles" resultType="Article">
 		SELECT A.*,
-		IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer
+		IFNULL(M.nickname, "탈퇴한 회원") AS extra__writer,
+		B.name as extra__boardName
 		FROM article AS A
 		LEFT JOIN `member` AS M
 		ON A.memberId = M.id
+		LEFT JOIN `board` as B
+		ON A.boardId = B.id
 		WHERE 1
 		<if test="boardId != null">
 			AND A.boardId = #{boardId}
