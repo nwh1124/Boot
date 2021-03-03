@@ -40,4 +40,4 @@
 		</nav>
 	</div>
 </header>
-<%@ include file="head.jspf"%> 
+<%@ include file="foot.jspf"%> 
