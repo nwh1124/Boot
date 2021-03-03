@@ -170,6 +170,65 @@ public class Util {
 	public static <T> T reqAttr(HttpServletRequest req, String attrName, T defaultValue) {
 		return (T) ifNull(req.getAttribute(attrName), defaultValue);
 	}
+
+	public static String getFileExtTypeCodeFromFileName(String fileName) {
+		String ext = getFileExtFromFileName(fileName).toLowerCase();
+
+		switch (ext) {
+		case "jpeg":
+		case "jpg":
+		case "gif":
+		case "png":
+			return "img";
+		case "mp4":
+		case "avi":
+		case "mov":
+			return "video";
+		case "mp3":
+			return "audio";
+		}
+
+		return "etc";
+	}
+
+	public static String getFileExtType2CodeFromFileName(String fileName) {
+		String ext = getFileExtFromFileName(fileName).toLowerCase();
+
+		switch (ext) {
+		case "jpeg":
+		case "jpg":
+			return "jpg";
+		case "gif":
+			return ext;
+		case "png":
+			return ext;
+		case "mp4":
+			return ext;
+		case "mov":
+			return ext;
+		case "avi":
+			return ext;
+		case "mp3":
+			return ext;
+		}
+
+		return "etc";
+	}
+
+	public static String getFileExtFromFileName(String fileName) {
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos + 1);
+
+		return ext;
+	}
+
+	public static String getNowYearMonthDateStr() {
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy_MM");
+
+		String dateStr = format1.format(System.currentTimeMillis());
+
+		return dateStr;
+	}
 	
 	
 }
