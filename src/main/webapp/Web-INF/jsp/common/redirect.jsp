@@ -17,10 +17,10 @@ if (historyBack) {
 	history.back();
 }
 
-var redirectUri = '${redirectUri}'.trim();
+var redirectUrl = '${redirectUrl}'.trim();
 
-if (redirectUri) {
-	location.replace(redirectUri);
+if (redirectUrl) {
+	location.replace(redirectUrl);
 }
 
 </script> 
