@@ -17,10 +17,11 @@ import com.example.demo.util.Util;
 @Component("beforeActionInterceptor") // 컴포넌트 이름 설정
 public class BeforeActionInterceptor implements HandlerInterceptor {
 	@Autowired
-	MemberService memberService;
+	private MemberService memberService;
 	
+	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-		
+
 		// request에 정보를 담기
 		// 현재 가지고 있는 파라미터들을 모두 param에 받음
 		Map<String, Object> param = Util.getParamMap(request);
@@ -72,7 +73,6 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			if(session.getAttribute("loginedMemberId") != null) {
 				loginedMemberId = (int) session.getAttribute("loginedMemberId");
 				loginedMember = memberService.getMember(loginedMemberId);
-				System.out.println(loginedMember.toString() + " 확인용");
 			}
 		}
 		

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.GenFileDao;
+import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
 
@@ -92,4 +93,9 @@ public class GenFileService {
 		
 		return new ResultData("S-1", "파일이 생성되었습니다.", "id", newGenFileId, "fileRealPath", targetFilePath, "fileName", targetFileName);
 	}
+	
+	public GenFile getGenFile(String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
+		return genFileDao.getGenFile(relTypeCode, relId, typeCode, type2Code, fileNo);
+	}
+	
 }

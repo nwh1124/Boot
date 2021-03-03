@@ -15,10 +15,10 @@ public class NeedAdminInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		// beforeActionInterceptor에서 선언한 정보는
-		// HttpServletRequest를 통해 모두 쓸 수 있음
+		// HttpServletRequest를 통해 모두 쓸 수 있음		
 		
 		boolean isAdmin = (boolean) request.getAttribute("isAdmin");
-		boolean isAjax = request.getParameter("isAjax") != null;
+		boolean isAjax = request.getParameter("isAjax") != null;		
 		
 		if(isAdmin == false) {
 			if(isAjax == false) {

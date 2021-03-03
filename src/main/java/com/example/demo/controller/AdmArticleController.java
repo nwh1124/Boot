@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import com.example.demo.dto.Article;
 import com.example.demo.dto.Board;
+import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.GenFileService;
@@ -67,7 +68,16 @@ public class AdmArticleController extends BaseController{
 		param.put("itemsInAPage", itemsInAPage);
 		param.put("boardId", boardId);
 		
-		List<Article> articles = articleService.getForPrintArticles(param);		
+		List<Article> articles = articleService.getForPrintArticles(param);
+		
+		for(Article article : articles) {
+			GenFile genFile = genFileService.getGenFile("article", article.getId(), "common", "attachment", 1);
+			
+			if(genFile != null) {
+				article.setExtra__thumbImg(genFile.getForPrintUrl());				
+			}
+		}
+		
 		req.setAttribute("articles", articles);
 		
 		return "adm/article/list";

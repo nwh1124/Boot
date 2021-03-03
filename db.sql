@@ -86,21 +86,6 @@ INSERT INTO article
 SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
 FROM article;
 
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
-INSERT INTO article
-(regDate, updateDate, memberId, title, `body`)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
-FROM article;
-
 # 게시판 테이블 추가
 CREATE TABLE board (
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -145,7 +130,7 @@ WHERE id = 1;
 # authKey 칼럼에 유니크 인덱스 추가
 ALTER TABLE `Boot`.`member` ADD UNIQUE INDEX(`authKey`);
 
-CREATE TABLE getFile (
+CREATE TABLE genFile (
   id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, # 번호
   regDate DATETIME DEFAULT NULL, # 작성날짜
   updateDate DATETIME DEFAULT NULL, # 갱신날짜
@@ -167,5 +152,4 @@ CREATE TABLE getFile (
 ); 
 
 SELECT *
-FROM `member`
-ORDER BY id DESC;
+FROM genFile

@@ -11,9 +11,8 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
+
 		// beforeActionInterceptor에서 선언한 정보를 모두 쓸 수 있음
-		
 		boolean isLogined = (boolean) request.getAttribute("isLogined");
 		boolean isAjax = true;
 		
