@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+<%@ include file="head.jspf"%>
 
 <header class="top-bar h-20 bg-white">
 	<div class="container mx-auto h-full flex">
@@ -20,7 +22,7 @@
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/board/list">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/board/list?boardId=1">
 						<span>게시판 관리</span>
 					</a>
 				</li>

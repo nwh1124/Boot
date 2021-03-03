@@ -99,6 +99,11 @@ public class AdmArticleController extends BaseController{
 		
 		return articleService.addArticle(param);
 	}
+
+	@RequestMapping("/adm/article/add")
+	public String add(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+		return "adm/article/add";
+	}
 	
 	@RequestMapping("/adm/article/doDelete")
 	@ResponseBody
@@ -150,6 +155,6 @@ public class AdmArticleController extends BaseController{
 		}
 		
 		return articleService.modifyArticle(param);
-	}
+	}	
 
 }
