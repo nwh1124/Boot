@@ -2,6 +2,9 @@ package com.example.demo.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import com.example.demo.dao.GenFileDao;
 import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
+import com.google.common.base.Joiner;
 
 @Service
 public class GenFileService {
@@ -101,8 +105,45 @@ public class GenFileService {
 	}
 
 	public ResultData saveFiles(MultipartRequest multipartRequest) {
+		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		
-		return null;
+		Map<String, ResultData> filesResultData = new HashMap<>();
+		List<Integer> genFileIds = new ArrayList<>();
+		
+		for(String fileInputName : fileMap.keySet()) {
+			MultipartFile multipartFile = fileMap.get(fileInputName);
+			
+			if(multipartFile.isEmpty() == false) {
+				ResultData fileResultData = save(multipartFile, 0);
+				int genFileId = (int) fileResultData.getBody().get("id");
+				genFileIds.add(genFileId);
+				
+				filesResultData.put(fileInputName, fileResultData);				
+			}
+		}
+		
+		String genFileIdsStr = Joiner.on(",").join(genFileIds);
+		
+		return new ResultData("S-1", "파일을 업로드하였습니다.", "filesResultData", filesResultData, "genFileIdsStr", genFileIdsStr);
+	}
+	
+	public void changeRelId(int id, int relId) {
+		genFileDao.changeRelId(id, relId);
+	}
+
+	public void deleteFiles(String relTypeCode, int relId) {
+		List<GenFile> genFiles = genFileDao.getGenFiles(relTypeCode, relId);
+		
+		for(GenFile genFile : genFiles) {
+			deleteFile(genFile);
+		}
+	}
+
+	private void deleteFile(GenFile genFile) {
+		String filePath = genFile.getFilePath(genFileDirPath);
+		Util.deleteFile(filePath);
+		
+		genFileDao.deleteFile(genFile.getId());		
 	}
 	
 }

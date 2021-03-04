@@ -141,12 +141,13 @@ public class AdmArticleController extends BaseController{
 	@RequestMapping("/adm/article/doDelete")
 	@ResponseBody
 	public ResultData doDelete(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		Integer id = (Integer) param.get("id");
-		
-		if(id == null) {
+
+		if(param.get("id") == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
+		
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		int id = Integer.parseInt((String)param.get("id"));		
 		
 		Article article = articleService.getArticle(param);
 		
