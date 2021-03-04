@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.example.demo.dao.GenFileDao;
 import com.example.demo.dto.GenFile;
@@ -91,11 +92,17 @@ public class GenFileService {
 			return new ResultData("F-3", "파일 저장에 실패했습니다.");
 		} 
 		
-		return new ResultData("S-1", "파일이 생성되었습니다.", "id", newGenFileId, "fileRealPath", targetFilePath, "fileName", targetFileName);
+		return new ResultData("S-1", "파일이 생성되었습니다.", "id", newGenFileId, "fileRealPath", targetFilePath, 
+								"fileName", targetFileName, "fileInputName", fileInputName);
 	}
 	
 	public GenFile getGenFile(String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
 		return genFileDao.getGenFile(relTypeCode, relId, typeCode, type2Code, fileNo);
+	}
+
+	public ResultData saveFiles(MultipartRequest multipartRequest) {
+		
+		return null;
 	}
 	
 }
