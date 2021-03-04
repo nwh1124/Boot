@@ -20,7 +20,6 @@ import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.GenFileService;
-import com.example.demo.util.Util;
 
 @Controller
 public class AdmArticleController extends BaseController{
@@ -162,6 +161,32 @@ public class AdmArticleController extends BaseController{
 		}
 		
 		return articleService.deleteArticle(param);
+	}
+	
+	@RequestMapping("/adm/article/modify")
+	public String showModify(Integer id, HttpServletRequest req) {
+		if(id == null) {
+			return msgAndBack(req, "id를 입력해주세요.");
+		}
+		
+		Article article = articleService.getForPrintArticle(id);
+		
+		List<GenFile> files = genFileService.getGenFiles("article", article.getId(), "common", "attachment");
+		
+		Map<String, GenFile> filesMap = new HashMap<>();
+		
+		for(GenFile file : files) {
+			filesMap.put(file.getFileNo() + "", file);
+		}
+		
+		article.getExtraNotNull().put("file__common__attachment", filesMap);
+		req.setAttribute("article", article);
+		
+		if(article == null) {
+			return msgAndBack(req, "존재하지 않는 게시물 번호입니다.");
+		}
+		
+		return "adm/article/modify";
 	}
 	
 	@RequestMapping("/adm/article/doModify")

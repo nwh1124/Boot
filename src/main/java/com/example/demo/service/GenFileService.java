@@ -104,6 +104,11 @@ public class GenFileService {
 		return genFileDao.getGenFile(relTypeCode, relId, typeCode, type2Code, fileNo);
 	}
 
+
+	public List<GenFile> getGenFiles(String relTypeCode, int relId, String typeCode, String type2Code) {
+		return genFileDao.getGenFiles(relTypeCode, relId, typeCode, type2Code);
+	}
+
 	public ResultData saveFiles(MultipartRequest multipartRequest) {
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		
@@ -145,5 +150,6 @@ public class GenFileService {
 		
 		genFileDao.deleteFile(genFile.getId());		
 	}
+
 	
 }
