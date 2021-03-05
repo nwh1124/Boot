@@ -54,6 +54,14 @@ function ArticleModify__checkAndSubmit(form) {
 			const input = form["file__article__" + articleId + "__common__attachment__" + inputNo];
 			input.value = '';
 		}
+
+		for(let inputNo = 1; inputNo <= ArticleModify__fileInputMaxCount; inputNo++){
+			const input = form["deleteFile__article__" + articleId + "__common__attachment__" + inputNo];
+
+			if(input){
+				input.checked = false;
+			}
+		}
 		
 		form.submit();
 	};
@@ -65,6 +73,17 @@ function ArticleModify__checkAndSubmit(form) {
 				needToUpload = true;
 				break;
 			}
+		}
+
+		if(needToUpload == false){
+			for(let inputNo = 1; inputNo <= ArticleModify__fileInputMaxCount; inputNo++){
+				const input = form["deleteFile__article__" + articleId + "__common__attachment__" + inputNo];
+			
+				if(input && input.checked){
+					needToUpload = true;
+					break;
+				}
+			}			
 		}
 		
 		if (needToUpload == false) {
@@ -118,7 +137,7 @@ function ArticleModify__checkAndSubmit(form) {
 					<div class="lg:flex lg:items-center lg:w-28">
 						<span>첨부파일 ${inputNo}</span>
 					</div>
-					<div class="lg:flex-grow">
+					<div class="lg:flex-grow input-file-wrap">
 						<input type="file" name="file__article__${article.id }__common__attachment__${inputNo}"
 							class="form-row-input w-full rounded-sm" />
 						<c:if test="${file != null}">
@@ -127,7 +146,8 @@ function ArticleModify__checkAndSubmit(form) {
 							</div>
 							<div>
 								<label>
-									<input type="checkbox" name="deleteFile__article__${article.id}__common__attachment__${fileNo}" value="Y" />
+									<input onclick="$(this).closest('.input-file-wrap').find(' > input[type=file]).value('')"
+									 type="checkbox" name="deleteFile__article__${article.id}__common__attachment__${fileNo}" value="Y" />
 									<span>삭제</span>
                             	</label>
 							</div>
