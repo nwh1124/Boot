@@ -44,20 +44,22 @@ public class ArticleService {
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 		
+		changeInputFileRelIds(param, id);
+		
+		return new ResultData("S-1", "게시물이 등록되었습니다.", "id", id);
+	}
+
+	private void changeInputFileRelIds(Map<String, Object> param, int id) {
 		String genFileIdsStr = Util.ifEmpty((String)param.get("genFileIdsStr"), null);
 		
 		if(genFileIdsStr != null) {
 			List<Integer> genFileIds = Util.getListDividedBy(genFileIdsStr, ",");
-			
-			// 게시물 작성 시에는 게시물의 번호를 알 수 없다
-			// 첨부파일의 relId는 우선 0으로 저장한 뒤에 후처리로 작업해준다
 			
 			for(int genFileId : genFileIds) {
 				genFileService.changeRelId(genFileId, id);
 			}
 		}
 		
-		return new ResultData("S-1", "게시물이 등록되었습니다.", "id", id);
 	}
 
 	public ResultData deleteArticle(Map<String, Object> param) {		
@@ -70,6 +72,10 @@ public class ArticleService {
 
 	public ResultData modifyArticle(Map<String, Object> param) {
 		articleDao.modifyArticle(param);
+		
+		int id = Util.getAsInt(param.get("id"), 0);
+		
+		changeInputFileRelIds(param, id);
 		
 		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", param.get("id"));
 	}
