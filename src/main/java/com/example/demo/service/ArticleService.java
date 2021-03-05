@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.ArticleDao;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.Board;
+import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
 
@@ -36,7 +38,19 @@ public class ArticleService {
 		param.put("limitStart", limitStart);
 		param.put("limitTake", limitTake);
 		
-		return articleDao.getForPrintArticles(param);
+		List<Article> articles = articleDao.getForPrintArticles(param);
+		List<Integer> articleIds = articles.stream().map(article -> article.getId()).collect(Collectors.toList());
+		Map<Integer, Map<String, GenFile>> filesMap = genFileService.getFilesMapKeyRelIdAndFileNo("article", articleIds, "common", "attachment");
+		
+		for(Article article : articles) {
+			Map<String, GenFile> mapByFileNo = filesMap.get(article.getId());
+			
+			if(mapByFileNo != null) {
+				article.getExtraNotNull().put("file__common__attachment", mapByFileNo);
+			}
+		}
+		
+		return articles;
 	}
 
 	public ResultData addArticle(Map<String, Object> param) {		
