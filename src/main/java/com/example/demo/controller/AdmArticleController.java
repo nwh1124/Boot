@@ -20,6 +20,7 @@ import com.example.demo.dto.GenFile;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.GenFileService;
+import com.example.demo.util.Util;
 
 @Controller
 public class AdmArticleController extends BaseController{
@@ -125,7 +126,7 @@ public class AdmArticleController extends BaseController{
 		for (String fileInputName : fileMap.keySet()) {
 			MultipartFile multipartFile = fileMap.get(fileInputName);
 			if(multipartFile.isEmpty() == false) {
-				genFileService.save(multipartFile, newArticleId);
+				genFileService.save(multipartFile);
 			}
 		}
 
@@ -194,10 +195,12 @@ public class AdmArticleController extends BaseController{
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		
-		if(param.get("id") == null) {
+		int id = Util.getAsInt(param.get("id"), 0);
+		
+		if(id == 0) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
-		if(param.get("title") == null && param.get("body") == null) {
+		if(Util.isEmpty(param.get("title")) && Util.isEmpty(param.get("body"))) {
 			return new ResultData("F-1", "수정할 제목 또는 내용을 입력해주세요.");
 		}		
 		

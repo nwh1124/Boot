@@ -65,7 +65,7 @@ public class ArticleService {
 	public ResultData deleteArticle(Map<String, Object> param) {		
 		articleDao.deleteArticle(param);
 		
-		genFileService.deleteFiles("article", Integer.parseInt((String)param.get("id")));
+		genFileService.deleteGenFiles("article", Integer.parseInt((String)param.get("id")));
 		
 		return new ResultData("S-1", "게시물이 삭제되었습니다.", "id", param.get("id"));
 	}
