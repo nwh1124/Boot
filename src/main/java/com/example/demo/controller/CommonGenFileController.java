@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,16 +43,10 @@ public class CommonGenFileController extends BaseController{
 		
 		GenFile genFile = genFileService.getGenFile(id);
 		String filePath = genFile.getFilePath(genFileDirPath);
-		Path path = Paths.get(filePath);
-		
-		Resource resource = new InputStreamResource(Files.newInputStream(path));
-		
-		String contentType = null;
-		try {
-			contentType = req.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-		} catch (IOException ex) {
 
-		}
+		Resource resource = new InputStreamResource(new FileInputStream(filePath));
+		
+		String contentType = req.getServletContext().getMimeType(new File(filePath).getAbsolutePath());
 
 		// Fallback to the default content type if type could not be determined
 		if (contentType == null) {
@@ -62,7 +54,6 @@ public class CommonGenFileController extends BaseController{
 		}
 
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + genFile.getOriginFileName() + "\"")
 				.body(resource);
 	}
 	
