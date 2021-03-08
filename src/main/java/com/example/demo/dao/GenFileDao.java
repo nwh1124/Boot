@@ -20,7 +20,7 @@ public interface GenFileDao {
 	List<GenFile> getGenFiles(@Param("relTypeCode") String relTypeCode, @Param("relId") int relId, 
 			@Param("typeCode") String typeCode, @Param("type2Code") String type2Code);
 	
-	List<GenFile> getGenFiles(@Param("relTypeCode") String relTypeCode, @Param("relId") int relId);
+	List<GenFile> getGenFilesByRelTypeCodeAndRelId(@Param("relTypeCode") String relTypeCode, @Param("relId") int relId);
 	
 	void changeRelId(@Param("id") int id, @Param("relId") int relId);
 

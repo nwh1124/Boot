@@ -21,10 +21,15 @@ public class Member {
 		@JsonIgnore
 		private String loginPw;
 		@JsonIgnore
+		private int authLevel;
 		private String authKey;
 		private String name;
 		private String nickname;
 		private String email;
 		private String phoneNumber;	
+		
+		public String getAuthLevelName() {
+			return "일반회원";
+		}
 
 }

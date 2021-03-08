@@ -48,6 +48,14 @@
 		ORDER BY typeCode, type2Code, fileNo
 	</select>
 	
+	<select id="getGenFilesByRelTypeCodeAndRelId" resultType="GenFile">
+		SELECT *
+		FROM genFile
+		WHERE 1
+		AND relTypeCode = #{relTypeCode}
+		AND relId = #{relId}
+	</select>
+	
 	<select id="getGenFileById" resultType="GenFile">
 		SELECT *
 		FROM genFile

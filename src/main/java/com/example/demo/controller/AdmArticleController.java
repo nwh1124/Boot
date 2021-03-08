@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartRequest;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.Board;
 import com.example.demo.dto.GenFile;
+import com.example.demo.dto.Member;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.GenFileService;
@@ -133,12 +134,9 @@ public class AdmArticleController extends BaseController{
 	@RequestMapping("/adm/article/doDelete")
 	@ResponseBody
 	public ResultData doDelete(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-
-		if(param.get("id") == null) {
-			return new ResultData("F-1", "id를 입력해주세요.");
-		}
 		
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member)req.getAttribute("loginedMember");
+		
 		int id = Integer.parseInt((String)param.get("id"));		
 		
 		Article article = articleService.getArticle(param);
@@ -147,7 +145,7 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 		
-		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMemberId);
+		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMember);
 		
 		if(actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -185,7 +183,8 @@ public class AdmArticleController extends BaseController{
 	@RequestMapping("/adm/article/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		
+		Member loginedMember = (Member)req.getAttribute("loginedMember");
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 		
@@ -202,7 +201,7 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", param.get("id"));
 		}
 		
-		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedMemberId);
+		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedMember);
 		
 		if(actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;

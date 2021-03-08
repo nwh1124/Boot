@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.ReplyDao;
+import com.example.demo.dto.Member;
 import com.example.demo.dto.Reply;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
@@ -37,12 +38,12 @@ public class ReplyService {
 		return replyDao.getForPrintReply(id);
 	}
 
-	public ResultData getActorCanDeleteRd(Reply reply, int actorId) {
-		if(reply.getMemberId() == actorId) {
+	public ResultData getActorCanDeleteRd(Reply reply, Member actor) {
+		if(reply.getMemberId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 		
-		if(memberService.isAdmin(actorId)) {
+		if(memberService.isAdmin(actor)) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 		
@@ -53,6 +54,16 @@ public class ReplyService {
 		replyDao.deleteReply(id);
 		
 		return new ResultData("S-1", "삭제되었습니다.", "id", id);
+	}
+	
+	public ResultData getActorCanModifyRd(Reply reply, Member actor) {
+		return getActorCanDeleteRd(reply, actor);
+	}
+
+	public ResultData modifyReply(int id, String body) {
+		replyDao.modifyReply(id, body);
+
+		return new ResultData("S-1", "댓글을 수정하였습니다.", "id", id);
 	}
 
 }

@@ -11,6 +11,7 @@ import com.example.demo.dao.ArticleDao;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.Board;
 import com.example.demo.dto.GenFile;
+import com.example.demo.dto.Member;
 import com.example.demo.dto.ResultData;
 import com.example.demo.util.Util;
 
@@ -94,20 +95,20 @@ public class ArticleService {
 		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", param.get("id"));
 	}
 
-	public ResultData getActorCanDeleteRd(Article article, int actorId) {
-		if(article.getMemberId() == actorId) {
+	public ResultData getActorCanDeleteRd(Article article, Member actor) {
+		if(article.getMemberId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 		
-		if(memberService.isAdmin(actorId)) {
+		if(memberService.isAdmin(actor)) {
 			return new ResultData("S-2", "가능합니다.");
 		}
 		
 		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
-	public ResultData getActorCanModifyRd(Article article, int actorId) {
-		return getActorCanDeleteRd(article, actorId);
+	public ResultData getActorCanModifyRd(Article article, Member actor) {
+		return getActorCanDeleteRd(article, actor);
 	}
 
 	public Article getForPrintArticle(Integer id) {		

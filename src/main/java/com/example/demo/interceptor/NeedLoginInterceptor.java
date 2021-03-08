@@ -41,7 +41,7 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 			}
 			else {
 				response.setContentType("application/json; charset=UTF-8");
-				response.getWriter().append("{\"resultCode\":\"" + resultCode + "\",\"msg\":\"" + resultMsg + "\"");
+				response.getWriter().append("{\"resultCode\":\"" + resultCode + "\",\"msg\":\"" + resultMsg + "\"}");
 			}
 			
 			return false;

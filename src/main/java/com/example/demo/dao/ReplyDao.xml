@@ -30,6 +30,15 @@
 		AND id = #{id}		
 	</select>
 	
+	<update id="modifyReply">
+		UPDATE reply
+		<set>
+			updateDate = NOW(),
+			body = #{body}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 	<delete id="deleteReply">
 		DELETE FROM reply
 		WHERE id = #{id}

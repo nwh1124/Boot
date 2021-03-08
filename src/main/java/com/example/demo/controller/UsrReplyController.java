@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.Article;
+import com.example.demo.dto.Member;
 import com.example.demo.dto.Reply;
 import com.example.demo.dto.ResultData;
 import com.example.demo.service.ArticleService;
@@ -71,7 +72,7 @@ public class UsrReplyController {
 	@RequestMapping("/usr/reply/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		if(id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -83,7 +84,7 @@ public class UsrReplyController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedMemberId);
+		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedMember);
 		
 		if(actorCanDeleteRd.isFail()){
 			return actorCanDeleteRd;

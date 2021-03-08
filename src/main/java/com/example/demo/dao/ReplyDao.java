@@ -14,6 +14,7 @@ public interface ReplyDao {
 	public void addReply(Map<String, Object> param);
 	public List<Reply> getForPrintReplies(@Param("relTypeCode") String relTypeCode, @Param("relId") Integer relId);
 	public Reply getForPrintReply(@Param("id") Integer id);
-	public void deleteReply(Integer id); 
+	public void deleteReply(Integer id);
+	public void modifyReply(@Param("id") int id, @Param("body") String body); 
 
 }

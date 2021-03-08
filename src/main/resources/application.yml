@@ -1,6 +1,9 @@
 server:
   port: 8021
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB      max-request-size: 50MB      
   mvc:
     view:      prefix: /Web-INF/jsp/
       suffix: .jsp

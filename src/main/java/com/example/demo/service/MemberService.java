@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,20 @@ public class MemberService {
 		return new ResultData("S-1", "회원 정보가 수정되었습니다.");
 	}
 
-	public boolean isAdmin(int actorId) {
-		return actorId == 1;
-	}
-
 	public boolean isAdmin(Member actor) {
-		return isAdmin(actor.getId());
+		return actor.getAuthLevel() == 7;
 	}
 
 	public Member getMemberByAuthKey(String authKey) {
 		return memberDao.getMemberByAuthKey(authKey);
+	}
+
+	public List<Member> getForPrintMembers(String searchKeywordType, String searchKeyword, int page,
+			int itemsInAPage) {		
+		int limitStart = (page - 1) * itemsInAPage;
+		int limitTake = itemsInAPage;
+		
+		return memberDao.getForPrintMembers(searchKeywordType, searchKeyword, limitStart, limitTake);
 	}
 
 }

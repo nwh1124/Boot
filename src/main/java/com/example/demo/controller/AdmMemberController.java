@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,11 @@ import com.example.demo.util.Util;
 public class AdmMemberController{
 	@Autowired
 	private MemberService memberService;
+	
+	@RequestMapping("/adm/member/join")
+	public String showJoin() {
+		return "adm/member/join";
+	}
 	
 	@RequestMapping("/adm/member/doJoin")
 	@ResponseBody
@@ -49,13 +55,17 @@ public class AdmMemberController{
 			return Util.msgAndBack(String.format("%s는 이미 존재하는 아이디입니다.", param.get("loginId")));
 		}
 		
+		memberService.doJoin(param);
+		
+		existingMember = memberService.getMemberByLoginId((String)param.get("loginId"));
+		
 		String msg = String.format("%s님 환영합니다.", existingMember.getNickname());
 		
 		return Util.msgAndReplace(msg, "../home/main");
 	}	
 	
 	@RequestMapping("/adm/member/login")
-	public String login() {
+	public String showlogin() {
 		return "adm/member/login";
 	}
 	
@@ -109,5 +119,38 @@ public class AdmMemberController{
 		ResultData rdMsg = memberService.modifyMember(param);
 		return Util.msgAndBack(rdMsg.getMsg());
 	}
+	
+	@RequestMapping("/adm/member/list")
+	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId,
+				String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
+		if (searchKeywordType != null) {
+			searchKeywordType = searchKeywordType.trim();
+		}
+
+		if (searchKeywordType == null || searchKeywordType.length() == 0) {
+			searchKeywordType = "name";
+		}
+
+		if (searchKeyword != null && searchKeyword.length() == 0) {
+			searchKeyword = null;
+		}
+
+		if (searchKeyword != null) {
+			searchKeyword = searchKeyword.trim();
+		}
+
+		if (searchKeyword == null) {
+			searchKeywordType = null;
+		}
+		
+		int itemsInAPage = 20;
+		
+		List<Member> members = memberService.getForPrintMembers(searchKeywordType, searchKeyword, page, itemsInAPage);
+		
+		req.setAttribute("members", members);
+	
+		return "adm/member/list";
+	}
+
 
 }

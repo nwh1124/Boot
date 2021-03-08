@@ -31,7 +31,7 @@ public class NeedAdminInterceptor implements HandlerInterceptor {
 			}
 			else {
 				response.setContentType("application/json; charset=UTF-8");
-				response.getWriter().append("{\"resultCode\":\"F-A\",\"msg\":\"관리자만 이용할 수 있습니다.\"");
+				response.getWriter().append("{\"resultCode\":\"F-A\",\"msg\":\"관리자만 이용할 수 있습니다.\"}");
 			}
 			// 리턴 false; 이후에 실행될 인터셉터와 액션이 실행되지 않음
 			return false;
