@@ -18,5 +18,6 @@ public interface MemberDao {
 	public void modifyMember(Map<String, Object> param);
 	public Member getMemberByAuthKey(@Param("authKey") String authKey);
 	public List<Member> getForPrintMembers(Map<String, Object> param);
+	public Member getForPrintMember(@Param("id") Integer id);
 
 }

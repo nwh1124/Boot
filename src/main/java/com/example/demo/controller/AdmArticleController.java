@@ -162,6 +162,10 @@ public class AdmArticleController extends BaseController{
 		
 		Article article = articleService.getForPrintArticle(id);
 		
+		if(article == null) {
+			return msgAndBack(req, "존재하지 않는 게시물 번호입니다.");
+		}
+		
 		List<GenFile> files = genFileService.getGenFiles("article", article.getId(), "common", "attachment");
 		
 		Map<String, GenFile> filesMap = new HashMap<>();
@@ -172,10 +176,6 @@ public class AdmArticleController extends BaseController{
 		
 		article.getExtraNotNull().put("file__common__attachment", filesMap);
 		req.setAttribute("article", article);
-		
-		if(article == null) {
-			return msgAndBack(req, "존재하지 않는 게시물 번호입니다.");
-		}
 		
 		return "adm/article/modify";
 	}

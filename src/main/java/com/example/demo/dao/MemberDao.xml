@@ -40,7 +40,7 @@
 		WHERE authKey = #{authKey}
 	</select>
 	
-		<select id="getForPrintMembers" resultType="Member">
+	<select id="getForPrintMembers" resultType="Member">
 		SELECT M.*
 		FROM `member` AS M
 		WHERE 1
@@ -64,6 +64,13 @@
 		<if test="limitStart != null and limitTake != null">
 			LIMIT #{limitStart}, #{limitTake}
 		</if>
+	</select>
+	
+	<select id="getForPrintMember" resultType="Member">
+		SELECT M.*
+		FROM `member` AS M
+		WHERE 1
+		AND id = #{id}
 	</select>
 	
 	<update id="modifyMember">
