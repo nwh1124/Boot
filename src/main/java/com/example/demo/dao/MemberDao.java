@@ -17,7 +17,6 @@ public interface MemberDao {
 	public Member getMemberByLoginId(@Param("loginId") String loginId);
 	public void modifyMember(Map<String, Object> param);
 	public Member getMemberByAuthKey(@Param("authKey") String authKey);
-	public List<Member> getForPrintMembers(@Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") String searchKeyword,
-			@Param("limitStart") int limitStart, @Param("limitTake") int limitTake);
+	public List<Member> getForPrintMembers(Map<String, Object> param);
 
 }
