@@ -59,22 +59,9 @@ public class ArticleService {
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 		
-		changeInputFileRelIds(param, id);
+		genFileService.changeInputFileRelIds(param, id);
 		
 		return new ResultData("S-1", "게시물이 등록되었습니다.", "id", id);
-	}
-
-	private void changeInputFileRelIds(Map<String, Object> param, int id) {
-		String genFileIdsStr = Util.ifEmpty((String)param.get("genFileIdsStr"), null);
-		
-		if(genFileIdsStr != null) {
-			List<Integer> genFileIds = Util.getListDividedBy(genFileIdsStr, ",");
-			
-			for(int genFileId : genFileIds) {
-				genFileService.changeRelId(genFileId, id);
-			}
-		}
-		
 	}
 
 	public ResultData deleteArticle(Map<String, Object> param) {		
@@ -90,7 +77,7 @@ public class ArticleService {
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 		
-		changeInputFileRelIds(param, id);
+		genFileService.changeInputFileRelIds(param, id);
 		
 		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", param.get("id"));
 	}

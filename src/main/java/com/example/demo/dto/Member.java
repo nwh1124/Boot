@@ -21,13 +21,14 @@ public class Member {
 		private String loginId;
 		@JsonIgnore
 		private String loginPw;
-		@JsonIgnore
 		private int authLevel;
+		@JsonIgnore
 		private String authKey;
 		private String name;
 		private String nickname;
 		private String email;
-		private String phoneNumber;	
+		private String phoneNumber;
+		private String extra__thumbImg;
 
 		public String getAuthLevelName() {
 			return MemberService.getAuthLevelName(this);
