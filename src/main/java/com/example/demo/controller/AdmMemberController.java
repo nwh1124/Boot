@@ -52,7 +52,7 @@ public class AdmMemberController extends BaseController{
 		
 		Member existingMember = memberService.getMemberByLoginId(loginId);
 		
-		if(existingMember == null) {
+		if(existingMember != null) {
 			return new ResultData("F-2", String.format("%s(은)는 이미 사용 중인 로그인 아이디입니다.", loginId));
 		}
 		
