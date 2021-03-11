@@ -98,6 +98,14 @@ public class MemberService {
 		return member;
 	}
 
+	public Member getForPrintMemberByLoginId(String loginId) {
+		Member member = memberDao.getMemberByAuthKey(loginId);
+		
+		updateForPrint(member);
+		
+		return member;
+	}
+
 	private void updateForPrint(Member member) {
 		GenFile genFile = genFileService.getGenFile("member", member.getId(), "common", "attachment", 1);
 		
@@ -106,14 +114,6 @@ public class MemberService {
 			member.setExtra__thumbImg(imgUrl);
 		}
 		
-	}
-
-	public Member getForPrintMemberByLoginId(String loginId) {
-		Member member = memberDao.getMemberByAuthKey(loginId);
-		
-		updateForPrint(member);
-		
-		return member;
 	}
 	
 	
