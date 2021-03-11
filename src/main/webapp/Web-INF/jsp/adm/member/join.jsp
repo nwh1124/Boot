@@ -4,6 +4,8 @@
 <%@ include file="../part/head.jspf"%>
 
 <script>
+	const JoinForm__checkAndSubmitDone = false;
+	let JoinForm__validLoginId = '';
 
 	// 로그인 아이디 중복체크 함수
 	function JoinForm__checkLoginIdDup(obj) {
@@ -20,11 +22,18 @@
 				loginId:form.loginId.value
 			},
 			function(data) {
-				alert(data.msg);
+				let colorClass = 'text-green-500';
+				if ( data.fail ) {
+					colorClass = 'text-red-500';
+				}
+				
+				$('.loginIdInputMsg').html("<span class='" + colorClass + "'>" + data.msg + "</span>");
+				
 				if ( data.fail ) {
 					form.loginId.focus();
 				}
 				else {
+					JoinForm__validLoginId = data.body.loginId;
 					form.loginPw.focus();
 				}
 			},
@@ -32,57 +41,72 @@
 		);
 	}
 
-	const JoinForm__checkAndSubmitDone = false;
 	function JoinForm__checkAndSubmit(form) {
+		
 		if (JoinForm__checkAndSubmitDone) {
 			return;
 		}
+		
 		form.loginId.value = form.loginId.value.trim();
 		if (form.loginId.value.length == 0) {
 			alert('로그인아이디를 입력해주세요.');
 			form.loginId.focus();
 			return;
 		}
+		
+		if ( form.loginId.value != JoinForm__validLoginId ) {
+			alert('로그인아이디 중복체크를해주세요.');
+			$('.btnCheckLoginIdDup').focus();
+			return;
+		}
+		
 		form.loginPw.value = form.loginPw.value.trim();
 		if (form.loginPw.value.length == 0) {
 			alert('로그인비번을 입력해주세요.');
 			form.loginPw.focus();
 			return;
 		}
+		
 		if (form.loginPwConfirm.value.length == 0) {
 			alert('로그인비번 확인을 입력해주세요.');
 			form.loginPwConfirm.focus();
 			return;
 		}
+		
 		if (form.loginPw.value != form.loginPwConfirm.value ) {
 			alert('로그인비번이 일치하지 않습니다.');
 			form.loginPwConfirm.focus();
 			return;
 		}
+		
 		form.name.value = form.name.value.trim();
 		if (form.name.value.length == 0) {
 			alert('이름을 입력해주세요.');
 			form.name.focus();
 			return;
 		}
+		
 		form.nickname.value = form.nickname.value.trim();
 		if (form.nickname.value.length == 0) {
 			alert('별명을 입력해주세요.');
 			form.nickname.focus();
 			return;
 		}
+		
 		form.email.value = form.email.value.trim();
 		if (form.email.value.length == 0) {
 			alert('이메일을 입력해주세요.');
 			form.email.focus();
 			return;
 		}
+		
 		form.phoneNumber.value = form.phoneNumber.value.trim();
 		if (form.phoneNumber.value.length == 0) {
 			alert('휴대전화번호를 입력해주세요.');
 			form.phoneNumber.focus();
 			return;
 		}
+		
 		form.submit();
 		JoinForm__checkAndSubmitDone = true;
 	}
@@ -115,7 +139,7 @@
 						<div class="loginIdInputMsg"></div>
 							<input
 								onclick="JoinForm__checkLoginIdDup(this);"
-								class="btn-primary mt-2 bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+								class="btnCheckLoginIdDup btn-primary mt-2 bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
 								type="button" value="체크"/>
 					</div>
 				</div>
